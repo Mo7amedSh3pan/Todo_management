@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="todo_form_view" model="ir.ui.view">
+        <field name="name">todo.form.view</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status" widget="statusbar" statusbar_visible="new,inprogress,completed"
+                           options="{'clickable': '1'}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="task_name"/>
+                            <field name="assign_to_id"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                            <field name="due_date"/>
+                            <field name="estmated_time"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="todo_tree_view" model="ir.ui.view">
+        <field name="name">todo.tree.view</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <tree create="1">
+                <field name="task_name"/>
+                <field name="assign_to_id"/>
+                <field name="description"/>
+                <field name="due_date"/>
+                <field name="estmated_time"/>
+                <field name="status"
+                       widget="badge"
+                       groups="base.group_no_one"
+                       decoration-info="status == 'new'"
+                       decoration-danger="status == 'inprogress'"
+                       decoration-success="status == 'completed'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="todo_search_view" model="ir.ui.view">
+        <field name="name">todo.search.view</field>
+        <field name="model">todo.task</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="task_name"/>
+                <field name="assign_to_id"/>
+
+                <filter string="new status" name="new_status" domain="[('status', '=', 'new')]"/>
+                <filter string="inprogress status" name="inprogress_status" domain="[('status', '=', 'inprogress')]"/>
+                <filter string="complete status" name="complete-status" domain="[('status', '=', 'completed')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_manager" string="assign_to_id" domain="[]"
+                            context="{'group_by':'assign_to_id'}"/>
+                    <filter name="group_department" string="status" domain="[]"
+                            context="{'group_by':'status'}"/>
+                    <filter name="group_company" string="due_date" domain="[]"
+                            context="{'group_by':'due_date'}"/>
+                </group>
+                <searchpanel>
+                    <field name="status" string="status" icon="fa-filter" enable_counters="1" select="multi"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="todo_action_view" model="ir.actions.act_window">
+        <field name="name">lawyers model</field>
+        <field name="res_model">todo.task</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>
